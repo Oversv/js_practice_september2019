@@ -6,6 +6,15 @@
  */
 const sumMultiples = arr => {
   if (arr === undefined) throw new Error("arr is required");
+  if (!Array.isArray(arr)) throw new Error("an Array is required");
+
+  let result = 0;
+
+  arr.forEach(n =>{
+    if(n % 3 === 0 || n % 5 === 0) result+=n;
+  })
+
+  return result;
 };
 
 /**
@@ -15,6 +24,11 @@ const sumMultiples = arr => {
  */
 const isValidDNA = str => {
   if (str === undefined) throw new Error("str is required");
+  if (typeof str !== 'string') throw new Error("a String is required");
+
+  const dna = ['C', 'G', 'T', 'A'];
+  
+  return str.toUpperCase().split('').every(c => dna.includes(c));
 };
 
 /**
@@ -23,7 +37,19 @@ const isValidDNA = str => {
  * @returns {String}
  */
 const getComplementaryDNA = str => {
-  if (str === undefined) throw new Error("str is required");
+  if (str === undefined) throw new Error("str is required");  
+  if (typeof str !== 'string') throw new Error("a String is required");
+
+  let result="";
+  
+  str.toUpperCase().split('').forEach(c =>{
+    if(c === 'T') result+='A'
+    else if(c === 'A') result+='T'
+    else if(c === 'C') result+='G'
+    else result+='C'   
+  });
+
+  return result;
 };
 
 /**
@@ -33,6 +59,15 @@ const getComplementaryDNA = str => {
  */
 const isItPrime = n => {
   if (n === undefined) throw new Error("n is required");
+  if (typeof n !== 'number') throw new Error("a Number is required");
+
+  let count = 0;
+  
+  for(let i = n; i >= 1; i--){
+    if(n % i === 0) count++;
+  }
+
+  return count === 2;
 };
 
 /**
@@ -48,7 +83,17 @@ const isItPrime = n => {
  */
 const createMatrix = (n, fill) => {
   if (n === undefined) throw new Error("n is required");
+  if (typeof n !== 'number') throw new Error("the first argument is not a number");
   if (fill === undefined) throw new Error("fill is required");
+
+
+  let arr = [];
+  
+  for(let i = 0; i < n ; i++) {
+     arr[i]=Array(n).fill(fill);
+  }
+  
+  return arr;
 };
 
 /**
@@ -65,7 +110,13 @@ const createMatrix = (n, fill) => {
  */
 const areWeCovered = (staff, day) => {
   if (staff === undefined) throw new Error("staff is required");
+  if (!Array.isArray(staff)) throw new Error("the first argument is not an Array");
   if (day === undefined) throw new Error("day is required");
+  if (typeof day !== 'string') throw new Error("the second argument is not a String");
+
+  if (staff.length === 0) return false;
+
+  return  staff.filter(obj => obj.rota.includes(day)).length >= 3;
 };
 
 module.exports = {
