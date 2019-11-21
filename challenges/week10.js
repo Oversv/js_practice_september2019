@@ -4,6 +4,9 @@
  */
 const sumDigits = n => {
   if (n === undefined) throw new Error("n is required");
+  if (typeof n !== "number") throw new Error("the first argument is not a number");
+
+  return Array.from(String(Math.abs(n)), Number).reduce((a, b) => a + b);  
 };
 
 /**
@@ -17,6 +20,19 @@ const sumDigits = n => {
 const createRange = (start, end, step) => {
   if (start === undefined) throw new Error("start is required");
   if (end === undefined) throw new Error("end is required");
+  if (typeof start !== 'number' || typeof end !== 'number'  ) throw new Error("the arguments are not a number"); 
+  if (step !== undefined && typeof step !== 'number') throw new Error("the step argument is not a number"); 
+  if (end < start ) throw new Error("end has to be higher than start"); 
+
+  let arr=[];
+  
+  if(step === undefined) step = 1;
+  
+  for(let i = start; i <= end; i+= step){
+    arr.push(i);
+  }
+
+  return arr;
 };
 
 /**
@@ -51,6 +67,25 @@ const createRange = (start, end, step) => {
 const getScreentimeAlertList = (users, date) => {
   if (users === undefined) throw new Error("users is required");
   if (date === undefined) throw new Error("date is required");
+  if (!Array.isArray(users)) throw new Error("incorrect arguments, pass an array and a string");
+  if (typeof date !== 'string') throw new Error("incorrect arguments, pass an array and a string");  
+  if(Array.isArray(users) && typeof date === 'string' && !/([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/.test(date)) throw new Error("incorrect date format, the correct format is like YYYY-MM-DD");
+  let arr=[];
+
+  users.forEach(e =>{    
+    e.screenTime.forEach(time =>{
+       
+      let totalTime = Object.values(time.usage).reduce((a, b)=> a + b);      
+      
+      if(time.date === date && totalTime >100){
+        arr.push(e.username);
+      }
+
+    });
+
+  });  
+  
+return arr;
 };
 
 /**
@@ -65,6 +100,23 @@ const getScreentimeAlertList = (users, date) => {
  */
 const hexToRGB = hexStr => {
   if (hexStr === undefined) throw new Error("hexStr is required");
+  if (typeof hexStr !== "string") throw new Error('hexStr is not a string')
+  if (typeof hexStr === "string" && !/^#[0-9a-f]{6}$/i.test(hexStr)) throw new Error('incorrect hexadecimal format the correct format is like #FF0010');
+
+  let result ="rgb(";
+  
+  hexStr= hexStr.split('').slice(1);
+    
+  for(let i = 0; i <6; i+=2){
+   
+    if(i <= 2){
+      result+= parseInt(hexStr[i]+hexStr[i+1], 16)+',';
+    }else{
+      result+= parseInt(hexStr[i]+hexStr[i+1], 16);
+    }
+   
+  }
+  return result+')';
 };
 
 /**
@@ -79,6 +131,23 @@ const hexToRGB = hexStr => {
  */
 const findWinner = board => {
   if (board === undefined) throw new Error("board is required");
+  if (!Array.isArray(board)) throw new Error("the argument is not an array");
+  if (board.length !== 3) throw new Error("incorrect size of the array");
+
+  let arr = [].concat(...board);
+  let result = "";
+ 
+  if(arr[0] === arr[1] && arr[0] === arr[2]) result = arr[0];
+    else if(arr[3] === arr[4] && arr[3] === arr[5]) result = arr[3];
+    else if(arr[6] === arr[7] && arr[6] === arr[8]) result = arr[6]; 
+    else if(arr[0] === arr[3] && arr[0] === arr[6]) result = arr[0];
+    else if(arr[1] === arr[4] && arr[1] === arr[7]) result = arr[1];
+    else if(arr[2] === arr[5] && arr[2] === arr[8]) result = arr[2];
+    else if(arr[0] === arr[4] && arr[0] === arr[8]) result = arr[0];
+    else result = null;   
+   
+  return result;
+
 };
 
 module.exports = {
